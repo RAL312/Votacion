@@ -2,8 +2,28 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "assets/fonts/Open Sans Light.ttf",
+      "path": "assets/fonts/Lato-Bold.ttf",
+      "sha1": "542498221d97bee5bdbccf86ee8890bf8e8005c9"
+    },
+    {
+      "path": "assets/fonts/Lato-Light.ttf",
+      "sha1": "ad0d178564445a535b15d417f5b18019923d3bab"
+    },
+    {
+      "path": "assets/fonts/Lato-Regular.ttf",
+      "sha1": "e923c72eda5e50a87e18ff5c71e9ef4b3b6455a3"
+    },
+    {
+      "path": "assets/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf",
+      "sha1": "436c9f82a4b6e1962fc698379e83ff39a9450820"
+    },
+    {
+      "path": "assets/fonts/OpenSans-VariableFont_wdth,wght.ttf",
       "sha1": "b436e315c744dc2143fb69e6f03b3278681f73b9"
+    },
+    {
+      "path": "assets/fonts/Oswald-VariableFont_wght.ttf",
+      "sha1": "83708d011b4d9bab0f4e275cf22b588558037a79"
     }
   ]
 }

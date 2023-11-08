@@ -12,36 +12,36 @@ export default class Inicio extends Component {
   render() {
     return (
       <View>
-       <View style={toque.fondo}>
-        <View style={toque.fondo2}>
+       <View style={estilo.fondo}>
+        <View style={estilo.fondo2}>
           <View>
           <View
-        style={toque.linea1}
+        style={estilo.linea1}
         />
-        <Text style={toque.h1}> VOTA - PLUS</Text>
+        <Text style={estilo.h1}> VOTA - PLUS</Text>
         <View
-        style={toque.linea}
+        style={estilo.linea}
         />
         <Image
-        style={toque.img1}
+        style={estilo.img1}
         source={require("./images/Mainfoto.jpeg")}
         />
-        <Text style={toque.subtitulo}>Ingresa aquí para empezar a votar</Text>
+        <Text style={estilo.subtitulo}>Ingresa aquí para empezar a votar</Text>
         <TextInput 
-        style={toque.caja1}
+        style={estilo.caja1}
         placeholder="Email"
         />
         <TextInput 
-        style={toque.caja1}
+        style={estilo.caja1}
         placeholder="Password"
         secureTextEntry={true}
        />
-       <TouchableOpacity style={toque.ingresar}>
-        <Text style={toque.subtitulo2}>Ingresar</Text>
+       <TouchableOpacity style={estilo.ingresar}>
+        <Text style={estilo.subtitulo2}>Ingresar</Text>
        </TouchableOpacity>
 
-      <Text style={toque.subtitulo}>Si eres administrador{'\n'} Ingresa aquí con tu cuenta única</Text>
-      <TouchableOpacity onPress={() => this.props.navigation.navigate('Admin')} ><Text style={toque.subtituloAqui}>Aquí</Text></TouchableOpacity>
+      <Text style={estilo.subtitulo}>Si eres administrador{'\n'} Ingresa aquí con tu cuenta única:</Text>
+      <TouchableOpacity onPress={() => this.props.navigation.navigate('Admin')} ><Text style={estilo.subtituloAqui}>Aquí</Text></TouchableOpacity>
         </View>
         </View>
        </View>
@@ -50,7 +50,7 @@ export default class Inicio extends Component {
   }
 }
 
-const toque = StyleSheet.create({
+const estilo = StyleSheet.create({
   fondo: {
    width: "100%",
    height: "100%",
@@ -59,16 +59,16 @@ const toque = StyleSheet.create({
 
  fondo2: {
   width: "95%",
-  height:"95%",
+  height: 800,
   borderColor: "#fca50d",
   backgroundColor: "white",
   borderRadius: 8,
-  marginLeft: 8,
+  marginLeft: 10,
   marginTop: "5%",
  },
 
  h1: {
-  fontFamily: 'Lato-Regular',
+  fontFamily: 'Oswald-VariableFont_wght',
   fontSize: 50,
   color: "black",
   textAlign:"center",
@@ -92,7 +92,7 @@ const toque = StyleSheet.create({
  },
 
  subtitulo:{
-  fontFamily:"OpenSans-Italic-VariableFont_wdth,wght",
+  fontFamily:"OpenSans-VariableFont_wdth,wght",
   fontSize: 16,
   textAlign:"center",
   marginTop: 30,
@@ -131,12 +131,11 @@ const toque = StyleSheet.create({
  ingresar:{
   width: 100,
   height: 40,
-  borderWidth: 1,
   marginLeft: 150,
   marginTop: 15,
   borderRadius: 10,
-  backgroundColor: "#3d3c3b"
+  backgroundColor: "#0E7AC5"
  },
  
-
+ 
 }); 

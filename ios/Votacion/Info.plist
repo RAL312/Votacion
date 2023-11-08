@@ -53,7 +53,12 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Open Sans Light.ttf</string>
+		<string>Lato-Bold.ttf</string>
+		<string>Lato-Light.ttf</string>
+		<string>Lato-Regular.ttf</string>
+		<string>OpenSans-Italic-VariableFont_wdth,wght.ttf</string>
+		<string>OpenSans-VariableFont_wdth,wght.ttf</string>
+		<string>Oswald-VariableFont_wght.ttf</string>
 	</array>
 </dict>
 </plist>
