@@ -3,7 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';//Navegación
 import { createNativeStackNavigator } from '@react-navigation/native-stack';//Navegación
 import Inicio from './Inicio';
 import Admin from './Admin';
-export default class Navegación extends Component {
+
+export default class Navegacion extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +18,8 @@ export default class Navegación extends Component {
         <Stack.Navigator>
           
         <Stack.Screen name="Inicio" component={Inicio} options={{headerShown:false}} />
-        <Stack.Screen name="Admin" component={Admin} options={{headerShown:false}} />
+        <Stack.Screen name="Admin" component={Admin} options={{headerShown:true}} />
+
         </Stack.Navigator>
       </NavigationContainer>
     );

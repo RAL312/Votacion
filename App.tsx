@@ -16,7 +16,8 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import Inicio from './Navegación';
+
+import Inicio from './Navegacion';
 
 import {
   Colors,

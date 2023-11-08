@@ -41,7 +41,7 @@ export default class Inicio extends Component {
        </TouchableOpacity>
 
       <Text style={toque.subtitulo}>Si eres administrador{'\n'} Ingresa aquí con tu cuenta única</Text>
-      <TouchableOpacity><Text style={toque.subtituloAqui}>Aquí</Text></TouchableOpacity>
+      <TouchableOpacity onPress={() => this.props.navigation.navigate('Admin')} ><Text style={toque.subtituloAqui}>Aquí</Text></TouchableOpacity>
         </View>
         </View>
        </View>
@@ -54,7 +54,7 @@ const toque = StyleSheet.create({
   fondo: {
    width: "100%",
    height: "100%",
-   backgroundColor: "#962424"
+   backgroundColor: "#0E7AC5"
   },
 
  fondo2: {
@@ -62,13 +62,13 @@ const toque = StyleSheet.create({
   height:"95%",
   borderColor: "#fca50d",
   backgroundColor: "white",
-  borderRadius: 1,
+  borderRadius: 8,
   marginLeft: 8,
   marginTop: "5%",
  },
 
  h1: {
-  fontFamily: 'OpenSans-VariableFont_wdth,wght',
+  fontFamily: 'Lato-Regular',
   fontSize: 50,
   color: "black",
   textAlign:"center",
@@ -92,7 +92,7 @@ const toque = StyleSheet.create({
  },
 
  subtitulo:{
-  fontFamily:"OpenSans-VariableFont_wdth,wght",
+  fontFamily:"OpenSans-Italic-VariableFont_wdth,wght",
   fontSize: 16,
   textAlign:"center",
   marginTop: 30,
