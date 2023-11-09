@@ -10,6 +10,7 @@ export default class Inicio extends Component {
   }
 
   render() {
+    
     return (
       <View>
        <View style={estilo.fondo}>
@@ -36,11 +37,12 @@ export default class Inicio extends Component {
         placeholder="Password"
         secureTextEntry={true}
        />
-       <TouchableOpacity style={estilo.ingresar}>
+       <TouchableOpacity style={estilo.ingresar}
+       onPress={() => this.props.navigation.navigate('Votacion')}>
         <Text style={estilo.subtitulo2}>Ingresar</Text>
        </TouchableOpacity>
 
-      <Text style={estilo.subtitulo}>Si eres administrador{'\n'} Ingresa aquí con tu cuenta única:</Text>
+      <Text style={estilo.subtitulo}>Si eres administrador{'\n'} Ingresa con tu cuenta única:</Text>
       <TouchableOpacity onPress={() => this.props.navigation.navigate('Admin')} ><Text style={estilo.subtituloAqui}>Aquí</Text></TouchableOpacity>
         </View>
         </View>

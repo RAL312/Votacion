@@ -104,7 +104,7 @@ const estilo = StyleSheet.create({
    ingresar:{
     width: 100,
     height: 40,
-    marginLeft: 100,
+    marginLeft: 95,
     marginTop: 15,
     borderRadius: 10,
     backgroundColor: "#0E7AC5"
