@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default class Votacion extends Component {
+export default class Votacion2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,14 +17,14 @@ export default class Votacion extends Component {
         <View style={estilo.fondo2}>
           <View>
           <Text style={estilo.usuario}>
-          {this.props.route.params.name}
+       
           </Text>
-            <Text style={estilo.texto}>¿Considera importante el beneficiar a los estudiantes a tener mayor seguridad dentro y sobre todo fuera de la escuela?</Text>
+            <Text style={estilo.texto}>¿El aumento de costo del semestre?</Text>
           </View>
           <TouchableOpacity style={estilo.voto}>
             <Text style={estilo.subtitulo}>Aprobación</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={estilo.voto} onPress={() => this.props.navigation.navigate('Votacion2')}>
+          <TouchableOpacity style={estilo.voto}>
             <Text style={estilo.subtitulo}>Negación</Text>
           </TouchableOpacity>
           <TouchableOpacity style={estilo.voto}>
@@ -52,7 +52,7 @@ const estilo = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40, 
+    paddingVertical: 30, 
   },
   
   voto: {

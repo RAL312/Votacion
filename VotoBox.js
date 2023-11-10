@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import Votacion from './Votacion';
+import Votacion2 from './Votacion2';
 
 export default class VotoBox extends Component {
   constructor(props) {
@@ -18,7 +18,15 @@ export default class VotoBox extends Component {
       initialParams={{name: this.props.route.params.name}}
 
       />
+
+      <Tab.Screen 
+        name="Vota2" 
+        component={Votacion2} 
+        initialParams={{nombre: this.props.route.params.name}}
+
+      />
         </Tab.Navigator>
+        
     );
   }
 }

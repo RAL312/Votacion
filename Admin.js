@@ -22,7 +22,6 @@ export default class Admin extends Component {
             />
             <Text style={estilo.subtitulo}>Ingrese su cuenta única de administrador</Text>
 
-       
          <TextInput
          style={estilo.caja1}
          placeholder="Email"
@@ -34,7 +33,7 @@ export default class Admin extends Component {
          secureTextEntry={true}
          />
           
-          <TouchableOpacity style={estilo.ingresar}>
+          <TouchableOpacity style={estilo.ingresar} onPress={() => this.props.navigation.navigate('Results')}>
           <Text style={estilo.subtitulo2}>Ingresar</Text>
           </TouchableOpacity>
 

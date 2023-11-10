@@ -34,7 +34,7 @@ export default class Inicio extends Component {
               return; 
             }else{
               // Con la referencia del constructor copiada
-              _this.props.navigation.navigate('Votacion', {name: xhttp.responseText, email: _this.state.email, password: _this.state.password});
+              _this.props.navigation.navigate('Votacion',  {name: xhttp.responseText, email: _this.state.email, password: _this.state.password});
             }
           }
       };
