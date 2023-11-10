@@ -5,15 +5,20 @@ export default class Votacion extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      votoSeleccionado: null,
     };
   }
 
+
   render() {
+   
     return (
+      
       <ScrollView contentContainerStyle={estilo.fondo}>
         <View style={estilo.fondo2}>
           <View>
+          <Text style={estilo.usuario}>
+          {this.props.route.params.name}
+          </Text>
             <Text style={estilo.texto}>¿Considera importante el beneficiar a los estudiantes a tener mayor seguridad dentro y sobre todo fuera de la escuela?</Text>
           </View>
           <TouchableOpacity style={estilo.voto}>
@@ -32,6 +37,7 @@ export default class Votacion extends Component {
 }
 
 const estilo = StyleSheet.create({
+
   fondo: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -69,5 +75,11 @@ const estilo = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     marginTop: 25,
-  }
+  },
+
+  usuario:{
+    fontSize: 20,
+    textAlign: 'center',
+    color: 'blue'
+  },
 });

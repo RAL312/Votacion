@@ -1,16 +1,48 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'react-native';
-
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Alert } from 'react-native';
 
 export default class Inicio extends Component {
   constructor(props) {
     super(props);
     this.state = {
+
     };
   }
 
+
   render() {
     
+    const acceder = () => {
+     //Codigo para resivir los datos del servidor
+      const _this = this;
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          // Typical action to be performed when the document is ready:
+          console.log(xhttp.responseText);
+          if (xhttp.responseText === '0') {
+            Alert.alert(
+              'Ha ocurrido un error :(',
+              'La contraseña es incorrecta. Intenta de nuevo.'
+              );
+            return; 
+          } else if (xhttp.responseText === '3') {
+            Alert.alert(
+              'Ha ocurrido un error :(',
+              'Cuenta no existente. ¡Crea una cuenta con nosotros!'
+              );
+              return; 
+            }else{
+              // Con la referencia del constructor copiada
+              _this.props.navigation.navigate('Votacion', {name: xhttp.responseText, email: _this.state.email, password: _this.state.password});
+            }
+          }
+      };
+      xhttp.open("GET", "https://vibronic-components.000webhostapp.com/verifica.php?correo=" + this.state.correo + "&contrasena=" + this.state.contrasena, true);
+      xhttp.send();
+    
+  
+    }
     return (
       <View>
        <View style={estilo.fondo}>
@@ -19,7 +51,7 @@ export default class Inicio extends Component {
           <View
         style={estilo.linea1}
         />
-        <Text style={estilo.h1}> VOTA - PLUS</Text>
+        <Text style={estilo.h1}>  VOTA - PLUS</Text>
         <View
         style={estilo.linea}
         />
@@ -31,14 +63,16 @@ export default class Inicio extends Component {
         <TextInput 
         style={estilo.caja1}
         placeholder="Email"
+        onChangeText={correo => this.setState({ correo })}
         />
         <TextInput 
         style={estilo.caja1}
         placeholder="Password"
+        onChangeText={contrasena => this.setState({ contrasena })}
         secureTextEntry={true}
        />
        <TouchableOpacity style={estilo.ingresar}
-       onPress={() => this.props.navigation.navigate('Votacion')}>
+       onPress={acceder}>
         <Text style={estilo.subtitulo2}>Ingresar</Text>
        </TouchableOpacity>
 
@@ -99,6 +133,7 @@ const estilo = StyleSheet.create({
   textAlign:"center",
   marginTop: 30,
   color: "black",
+  marginLeft: 10
  },
 
  subtituloAqui:{
