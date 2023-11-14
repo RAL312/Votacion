@@ -4,7 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';//Na
 import Inicio from './Inicio';
 import Admin from './Admin';
 import Votacion from './Votacion';
-import Votacion2 from './Votacion2';
+
+
+
 import Results from './Results';
 
 export default class Navegacion extends Component {
@@ -23,7 +25,6 @@ export default class Navegacion extends Component {
         <Stack.Screen name="Inicio" component={Inicio} options={{headerShown:false}} />
         <Stack.Screen name="Admin" component={Admin} options={{headerShown:true}} />
         <Stack.Screen name="Votacion" component={Votacion} options={{headerShown:false}} />
-        <Stack.Screen name="Votacion2" component={Votacion2} options={{headerShown:false}} />
         <Stack.Screen name="Results" component={Results} options={{headerShown:false}} />
 
         </Stack.Navigator>

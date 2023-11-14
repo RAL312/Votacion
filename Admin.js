@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
-
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 
 export default class Admin extends Component {
   constructor(props) {
@@ -15,9 +15,9 @@ export default class Admin extends Component {
         <View style={estilo.fondo}>
           <View style={estilo.fondo2}>
             <View>
-            <Text style={estilo.h1}>Administrador</Text>
+            <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal">Administrador</Animatable.Text>
             <Image
-            source={require("./images/admin.png")}
+            source={require("./images/soyadmin.jpg")}
             style={estilo.img1}
             />
             <Text style={estilo.subtitulo}>Ingrese su cuenta única de administrador</Text>
@@ -36,6 +36,8 @@ export default class Admin extends Component {
           <TouchableOpacity style={estilo.ingresar} onPress={() => this.props.navigation.navigate('Results')}>
           <Text style={estilo.subtitulo2}>Ingresar</Text>
           </TouchableOpacity>
+
+        
 
             </View>
           </View>

@@ -1,17 +1,44 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Alert } from 'react-native';
+import styled from 'styled-components/native';
+import * as Animatable from 'react-native-animatable';
+
+ const StyledView = styled.View`
+ width: 100%;
+ height: 100%;
+ backgroundColor: #0E7AC5;`;
+ 
+ const StyledView2 = styled.View`
+ width: 95%;
+ height: 800px;
+ borderColor: #fca50d;
+ backgroundColor: white;
+ borderRadius: 8px;
+ marginLeft: 10px;
+ marginTop: 5%;`;
+
+ const StyledText = styled.Text`
+ font-Family: Oswald-VariableFont_wght;
+ font-Size: 50px;
+ color: black;
+ textAlign: center;
+ marginRight: 4%;
+ marginTop: 12%;`;
+
+  
+
 
 export default class Inicio extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      
     };
   }
 
 
   render() {
-    
+
     const acceder = () => {
      //Codigo para resivir los datos del servidor
       const _this = this;
@@ -40,24 +67,23 @@ export default class Inicio extends Component {
       };
       xhttp.open("GET", "https://vibronic-components.000webhostapp.com/verifica.php?correo=" + this.state.correo + "&contrasena=" + this.state.contrasena, true);
       xhttp.send();
-    
-  
     }
     return (
+   
       <View>
-       <View style={estilo.fondo}>
-        <View style={estilo.fondo2}>
+       <StyledView>
+      <StyledView2>
           <View>
           <View
         style={estilo.linea1}
         />
-        <Text style={estilo.h1}>  VOTA - PLUS</Text>
+        <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal" >  VOTA - PLUS</Animatable.Text>
         <View
         style={estilo.linea}
         />
         <Image
         style={estilo.img1}
-        source={require("./images/Mainfoto.jpeg")}
+        source={require("./images/votenow.jpg")}
         />
         <Text style={estilo.subtitulo}>Ingresa aquí para empezar a votar</Text>
         <TextInput 
@@ -78,30 +104,20 @@ export default class Inicio extends Component {
 
       <Text style={estilo.subtitulo}>Si eres administrador{'\n'} Ingresa con tu cuenta única:</Text>
       <TouchableOpacity onPress={() => this.props.navigation.navigate('Admin')} ><Text style={estilo.subtituloAqui}>Aquí</Text></TouchableOpacity>
+
+      
+   
         </View>
+        </StyledView2>
+        </StyledView>
         </View>
-       </View>
-      </View>
+       
+
     );
   }
 }
 
 const estilo = StyleSheet.create({
-  fondo: {
-   width: "100%",
-   height: "100%",
-   backgroundColor: "#0E7AC5"
-  },
-
- fondo2: {
-  width: "95%",
-  height: 800,
-  borderColor: "#fca50d",
-  backgroundColor: "white",
-  borderRadius: 8,
-  marginLeft: 10,
-  marginTop: "5%",
- },
 
  h1: {
   fontFamily: 'Oswald-VariableFont_wght',
@@ -117,7 +133,7 @@ const estilo = StyleSheet.create({
   height: 200,
   borderRadius: 10,
   marginLeft: "19%",
-  marginTop: 10,
+  marginTop: 20,
  },
 
  linea:{

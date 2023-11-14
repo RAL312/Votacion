@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Votacion from './Votacion';
-import Votacion2 from './Votacion2';
+import Votacion2 from './Votaciones/Votacion2';
 
 export default class VotoBox extends Component {
   constructor(props) {
