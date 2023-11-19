@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
 import * as Animatable from 'react-native-animatable';
 
+
 const StyledView = styled.View`
  width: 100%;
  height: 100%;
@@ -31,32 +32,78 @@ const StyledView = styled.View`
  textAlign: center;
  marginTop: 40px,;`;
 
+ const StyledSiguienteButton = styled.TouchableOpacity`
+ position: absolute;
+ bottom: 20px;
+ right: 20px;
+ padding: 15px;
+ backgroundColor: #17a398;
+ borderRadius: 5px;
+`;
+
 
 export default class Results extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      contadores: { boton1: 0, boton2: 0, boton3: 0 }
+      contadores: { boton1: 0, boton2: 0, boton3: 0 },
+      indiceTexto: 0,
+      textos: ["CF01: Garantizar que todos los estudiantes tengan acceso a tecnología actualizada y conexiones a Internet de alta velocidad", 
+      "CF02: Invertir en la renovación y mejora de las instalaciones deportivas", 
+      "CF03: Implementación de un Sistema de Recompensas para la Asistencia a Conferencias", 
+      "CF04: Desarrollar programas de tutorías para apoyar a los estudiantes académicamente", 
+      "CF05: Aumentar el apoyo y la financiación para actividades culturales en el campus", 
+      "CF06: Instalación de Hamacas en Áreas Comunes del Campus", 
+      "CF07: Desarrollo de Programas de Intercambio Internacional", 
+      "CF08: Instalación de Estaciones de Carga Solar para Dispositivos Móviles", 
+      "CF09: Implementación de un Programa de Mentores para Estudiantes de Primer Año",
+      "CF09: Implementación de un Programa de Mentores para Estudiantes de Primer Año"],
     };
   }
+
 
   async componentDidMount() {
     try {
       const contadoresString = await AsyncStorage.getItem('contadores');
+      const indiceTextoString = await AsyncStorage.getItem('indiceTexto'); // Agrega esta línea
       if (contadoresString !== null) {
         const contadores = JSON.parse(contadoresString);
-        this.setState({ contadores });
+        const indiceTexto = indiceTextoString !== null ? parseInt(indiceTextoString) : 0; // Convierte a número
+        this.setState({ contadores, indiceTexto });
       }
     } catch (error) {
       console.log("Hay un error al obtener contadores desde AsyncStorage:", error);
     }
   }
 
-  resetVotes = async () => {
-    await AsyncStorage.removeItem('contadores'); // Borra los votos de AsyncStorage
-    this.setState({ contadores: { boton1: 0, boton2: 0, boton3: 0 } }); // Reinicia los votos en el estado local
+
+ 
+  
+  // Nueva función para cambiar el texto
+  cambiarTexto = () => {
+    this.setState(
+      (prevState) => ({
+        indiceTexto: (prevState.indiceTexto + 1) % 10, // Cambiado de 10 a 9 para que coincida con la longitud del array
+      }),
+      () => {
+        // Verifica si es el índice final y realiza la navegación
+        if (this.state.indiceTexto === 9) { // Cambiado de 9 a 8 para que coincida con el último índice
+          this.props.navigation.navigate('Inicio');
+        }
+        // Guarda el nuevo índice en AsyncStorage
+        AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
+      }
+    );
   };
   
+
+  resetVotes = async () => {
+    await AsyncStorage.removeItem('contadores'); // Borra los votos de AsyncStorage
+    await AsyncStorage.removeItem('indiceTexto');
+    this.setState({ contadores: { boton1: 0, boton2: 0, boton3: 0 } }); // Reinicia los votos en el estado local
+  };
+
+
   render() {
     const { contadores } = this.state;
    
@@ -65,8 +112,9 @@ export default class Results extends Component {
       <View>
         <StyledView>
          <StyledView2>
+          
          <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal">-Resultados de los votos-</Animatable.Text>
-
+         <Text style={estilo.texto}>{this.state.textos[this.state.indiceTexto]}</Text>
          <Text style={estilo.subtitulo}>A favor: {contadores.boton1}</Text>
          <Text style={estilo.subtitulo2}>En contra: {contadores.boton2}</Text>
          <Text style={estilo.subtitulo3}>Abstinencia: {contadores.boton3}</Text>
@@ -74,12 +122,21 @@ export default class Results extends Component {
          <TouchableOpacity style={{marginTop: 200,}}onPress={this.resetVotes} >
           <StyledText>Reiniciar Votos</StyledText>
         </TouchableOpacity>
+        <TouchableOpacity style={estilo.voto4} onPress={() => this.props.navigation.navigate('Votacion')}>
+            <Text style={estilo.subtitulo}></Text>
+          </TouchableOpacity> 
+
+
+        <StyledSiguienteButton onPress={this.cambiarTexto}>
+          <Text style={estilo.subtituloNext}>Siguiente</Text>
+        </StyledSiguienteButton>
+
         </StyledView2>
         </StyledView>
       </View> 
     );
   }
-}41
+}
 
 const estilo = StyleSheet.create ({
    
@@ -116,5 +173,21 @@ const estilo = StyleSheet.create ({
         color: "black",
         marginLeft: 10
        },
+
+       texto: {
+        fontFamily: 'OpenSans-VariableFont_wdth,wght',
+        fontSize: 17,
+        color: 'black',
+        textAlign: 'center',
+      },  
+    
+      voto4: {
+        width: 30,
+        height: 20,
+        backgroundColor: '#0E7AB6',
+        marginVertical: 20, 
+        borderRadius: 5,
+      },
+    
       
 });

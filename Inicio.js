@@ -6,7 +6,9 @@ import * as Animatable from 'react-native-animatable';
  const StyledView = styled.View`
  width: 100%;
  height: 100%;
- backgroundColor: #0E7AC5;`;
+ backgroundColor: #0E7AC5;
+ alignItems: center;
+ justifyContent: center;`;
  
  const StyledView2 = styled.View`
  width: 95%;
@@ -14,16 +16,15 @@ import * as Animatable from 'react-native-animatable';
  borderColor: #fca50d;
  backgroundColor: white;
  borderRadius: 8px;
- marginLeft: 10px;
- marginTop: 5%;`;
+ alignItems: center;
+ justifyContent: center;`;
 
  const StyledText = styled.Text`
  font-Family: Oswald-VariableFont_wght;
  font-Size: 50px;
  color: black;
  textAlign: center;
- marginRight: 4%;
- marginTop: 12%;`;
+`;
 
   
 
@@ -61,9 +62,12 @@ export default class Inicio extends Component {
               return; 
             }else{
               // Con la referencia del constructor copiada
-              _this.props.navigation.navigate('Votacion',  {name: xhttp.responseText, email: _this.state.email, password: _this.state.password});
+              _this.props.navigation.navigate('Results',  {name: xhttp.responseText, email: _this.state.email, password: _this.state.password} );
+              _this.props.navigation.navigate('Votacion');
             }
+            _this.props.navigation.navigate('Results');
           }
+          _this.props.navigation.navigate('Votacion');
       };
       xhttp.open("GET", "https://vibronic-components.000webhostapp.com/verifica.php?correo=" + this.state.correo + "&contrasena=" + this.state.contrasena, true);
       xhttp.send();
@@ -73,11 +77,11 @@ export default class Inicio extends Component {
       <View>
        <StyledView>
       <StyledView2>
-          <View>
+        
           <View
         style={estilo.linea1}
         />
-        <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal" >  VOTA - PLUS</Animatable.Text>
+        <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal" >VOTA - PLUS</Animatable.Text>
         <View
         style={estilo.linea}
         />
@@ -102,12 +106,9 @@ export default class Inicio extends Component {
         <Text style={estilo.subtitulo2}>Ingresar</Text>
        </TouchableOpacity>
 
-      <Text style={estilo.subtitulo}>Si eres administrador{'\n'} Ingresa con tu cuenta única:</Text>
+      <Text style={estilo.subtitulo}>Si eres administrador...{'\n'} Ingresa con tu cuenta justo:</Text>
       <TouchableOpacity onPress={() => this.props.navigation.navigate('Admin')} ><Text style={estilo.subtituloAqui}>Aquí</Text></TouchableOpacity>
 
-      
-   
-        </View>
         </StyledView2>
         </StyledView>
         </View>
@@ -124,23 +125,22 @@ const estilo = StyleSheet.create({
   fontSize: 50,
   color: "black",
   textAlign:"center",
-  marginRight: "4%",
-  marginTop: "12%"
+  marginTop: -50,
+
  },
 
  img1: {
   width: 250,
   height: 200,
   borderRadius: 10,
-  marginLeft: "19%",
-  marginTop: 20,
+  marginTop: 10,
  },
 
  linea:{
   width: "80%",
   height: 2,
   backgroundColor: 'black',
-  marginLeft: "11%",
+  marginTop: 10,
  },
 
  subtitulo:{
@@ -149,7 +149,7 @@ const estilo = StyleSheet.create({
   textAlign:"center",
   marginTop: 30,
   color: "black",
-  marginLeft: 10
+ 
  },
 
  subtituloAqui:{
@@ -177,14 +177,12 @@ const estilo = StyleSheet.create({
   borderColor: "black",
   backgroundColor: "white",
   marginTop: 20,
-  marginLeft: "20%",
   borderRadius: 3,
  },
 
  ingresar:{
   width: 100,
   height: 40,
-  marginLeft: 150,
   marginTop: 15,
   borderRadius: 10,
   backgroundColor: "#0E7AC5"

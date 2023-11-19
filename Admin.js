@@ -17,7 +17,7 @@ export default class Admin extends Component {
             <View>
             <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal">Administrador</Animatable.Text>
             <Image
-            source={require("./images/soyadmin.jpg")}
+            source={require("./images/admin.png")}
             style={estilo.img1}
             />
             <Text style={estilo.subtitulo}>Ingrese su cuenta única de administrador</Text>
@@ -37,8 +37,7 @@ export default class Admin extends Component {
           <Text style={estilo.subtitulo2}>Ingresar</Text>
           </TouchableOpacity>
 
-        
-
+       
             </View>
           </View>
         </View>
