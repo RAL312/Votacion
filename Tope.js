@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Alert } from 'react-native';
 import styled from 'styled-components/native';
+import { Button } from 'react-native-elements';
 
 const StyledView = styled.View`
  width: 100%;
@@ -31,10 +32,13 @@ export default class Tope extends Component {
     return (
       <StyledView>
         <StyledView2>
-        <TouchableOpacity style={estilo.voto4} onPress={() => this.props.navigation.navigate('Votacion')}>
-            <Text style={estilo.subtitulo}></Text>
-          </TouchableOpacity> 
-
+          <Text style={estilo.h1}>COMIENZA A VOTAR AHORA</Text>
+          <Button
+              title="Pulsa aquí"
+              type="solid"
+              containerStyle={estilo.voto4}
+              onPress={() => this.props.navigation.navigate('Votacion')}
+            />
         </StyledView2>
       </StyledView>
     );
@@ -65,5 +69,17 @@ const estilo = StyleSheet.create({
         color: "black",
        
        },
-      
+
+       h1: {
+        fontFamily: 'Oswald-VariableFont_wght',
+        fontSize: 40,
+        textAlign: 'center',
+        color: 'black',
+       },
+
+       subtituloNext: {
+        fontFamily: 'Lato-Bold',
+        color: 'white',
+        textAlign: 'center',
+      },
 });

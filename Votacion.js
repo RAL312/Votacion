@@ -42,21 +42,20 @@ export default class Votacion extends Component {
     };
   }
 
-  async componentDidMount() {
-    try {
-      const contadoresString = await AsyncStorage.getItem('contadores');
-      const indiceTextoString = await AsyncStorage.getItem('indiceTexto'); // Agrega esta línea
-      if (contadoresString !== null) {
-        const contadores = JSON.parse(contadoresString);
-        const indiceTexto = indiceTextoString !== null ? parseInt(indiceTextoString) : 0; // Convierte a número
-        this.setState({ contadores, indiceTexto });
-      }
-    } catch (error) {
-      console.log("Hay un error al obtener contadores desde AsyncStorage:", error);
-    }
-  }
+ async componentDidMount() {
+  try {
+    // Obtener el índice de texto desde AsyncStorage
+    const indiceTextoString = await AsyncStorage.getItem('indiceTexto');
 
-  
+    if (indiceTextoString !== null) {
+      const indiceTexto = parseInt(indiceTextoString);
+      this.setState({ indiceTexto });
+    }
+  } catch (error) {
+    console.log("Hay un error al obtener el índice de texto desde AsyncStorage:", error);
+  }
+}
+
 
   cambiarTexto = async () => {
     try {
@@ -118,7 +117,7 @@ export default class Votacion extends Component {
           <TouchableOpacity
             style={estilo.voto}
             onPress={() => this.realizarVoto('boton1')}
-            // Deshabilita el botón si ya votó 
+            disabled={this.state.votoRealizado || !this.state.botonesHabilitados} // Deshabilita el botón si ya votó // Deshabilita el botón si ya votó 
             >
             <Text style={estilo.subtitulo}>A favor</Text>
 
@@ -128,7 +127,7 @@ export default class Votacion extends Component {
           <TouchableOpacity
             style={estilo.voto2}
             onPress={() => this.realizarVoto('boton2')}
-            
+            disabled={this.state.votoRealizado || !this.state.botonesHabilitados} // Deshabilita el botón si ya votó 
 >
             <Text style={estilo.subtitulo}>En contra</Text>
 
@@ -137,7 +136,7 @@ export default class Votacion extends Component {
           <TouchableOpacity
              style={estilo.voto3}
             onPress={() => this.realizarVoto('boton3')}
-            
+            disabled={this.state.votoRealizado || !this.state.botonesHabilitados} // Deshabilita el botón si ya votó 
 >
             <Text style={estilo.subtitulo}>Abstinencia</Text>
 

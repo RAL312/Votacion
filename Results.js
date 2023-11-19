@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
 import * as Animatable from 'react-native-animatable';
-
+import { Button } from 'react-native-elements';
 
 const StyledView = styled.View`
  width: 100%;
@@ -98,7 +98,8 @@ export default class Results extends Component {
     }
   };
   
-  resetContadores = async () => {
+
+    resetContadores = async () => {
     await AsyncStorage.removeItem('contadores');
     this.setState({ contadores: { boton1: 0, boton2: 0, boton3: 0 } });
   };
@@ -112,27 +113,29 @@ export default class Results extends Component {
          <StyledView2>
           
          <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal">-Resultados de los votos-</Animatable.Text>
-         <Text style={estilo.texto}>{this.state.textos[this.state.indiceTexto]}</Text>
+        
          <Text style={estilo.subtitulo}>A favor: {contadores.boton1}</Text>
          <Text style={estilo.subtitulo2}>En contra: {contadores.boton2}</Text>
          <Text style={estilo.subtitulo3}>Abstinencia: {contadores.boton3}</Text>
 
-        
-         <TouchableOpacity style={{ marginTop: 10 }} onPress={this.resetContadores}>
-              <StyledText>Reiniciar Contadores</StyledText>
-            </TouchableOpacity>
-
-
+    
         <TouchableOpacity
-  style={estilo.voto4}
-  onPress={() => {
-    this.props.navigation.navigate('Tope');
-    this.props.navigation.navigate('Votacion');
-  }}
->
+          style={estilo.voto4}
+          onPress={() => {
+            this.props.navigation.navigate('Tope');
+            this.props.navigation.navigate('Votacion');}}>
+
   <Text style={estilo.subtitulo}></Text>
 </TouchableOpacity>
       
+          <Button
+              title="Reiniciar Contadores"
+              tyope="solid"
+              containerStyle={{ marginTop: 10 }}
+              onPress={this.resetContadores}
+            />
+
+
         <StyledSiguienteButton onPress={this.cambiarTexto}>
           <Text style={estilo.subtituloNext}>Siguiente</Text>
         </StyledSiguienteButton>
