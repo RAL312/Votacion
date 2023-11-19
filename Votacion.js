@@ -25,7 +25,6 @@ export default class Votacion extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      numero: 1,
       contadores: { boton1: 0, boton2: 0, boton3: 0 },
       textos: ["CF01: Garantizar que todos los estudiantes tengan acceso a tecnología actualizada y conexiones a Internet de alta velocidad", 
       "CF02: Invertir en la renovación y mejora de las instalaciones deportivas", 
@@ -35,23 +34,21 @@ export default class Votacion extends Component {
       "CF06: Instalación de Hamacas en Áreas Comunes del Campus", 
       "CF07: Desarrollo de Programas de Intercambio Internacional", 
       "CF08: Instalación de Estaciones de Carga Solar para Dispositivos Móviles", 
-      "CF09: Implementación de un Programa de Mentores para Estudiantes de Primer Año,",
-      "CF09: Implementación de un Programa de Mentores para Estudiantes de Primer Año"],
+       "CF01: Garantizar que todos los estudiantes tengan acceso a tecnología actualizada y conexiones a Internet de alta velocidad",
+      ],
       indiceTexto: 0,
       votoRealizado: false,
       botonesHabilitados: true,
     };
   }
 
-
-
   async componentDidMount() {
     try {
       const contadoresString = await AsyncStorage.getItem('contadores');
-      const indiceTextoString = await AsyncStorage.getItem('indiceTexto');
-      if (contadoresString !== null && indiceTextoString !== null) {
+      const indiceTextoString = await AsyncStorage.getItem('indiceTexto'); // Agrega esta línea
+      if (contadoresString !== null) {
         const contadores = JSON.parse(contadoresString);
-        const indiceTexto = parseInt(indiceTextoString);
+        const indiceTexto = indiceTextoString !== null ? parseInt(indiceTextoString) : 0; // Convierte a número
         this.setState({ contadores, indiceTexto });
       }
     } catch (error) {
@@ -59,40 +56,30 @@ export default class Votacion extends Component {
     }
   }
 
- 
-
-  cambiarTexto = () => {
-    this.setState(
-      (prevState) => ({
-        indiceTexto: (prevState.indiceTexto + 1) % this.state.textos.length,
-        botonesHabilitados: true,
-        votoRealizado: false,
-      }),
-      () => {
-        if (this.state.indiceTexto === this.state.textos.length - 1) {
-          this.props.navigation.navigate('Inicio');
-        }
-        AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
-      }
-    );
-  };
   
 
+  cambiarTexto = async () => {
+    try {
+      await this.setState(
+        (prevState) => ({
+          indiceTexto: (prevState.indiceTexto + 1) % 9, // Modificado para que coincida con la longitud del array
+        })
+      );
+  
+      // Verifica si es el índice final y realiza la navegación
+      if (this.state.indiceTexto === 8) { // Cambiado de 9 a 8 para que coincida con el último índice
+        this.props.navigation.navigate('Inicio');
+      }
+  
+      // Guarda el nuevo índice en AsyncStorage
+      await AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
+    } catch (error) {
+      console.log("Error al cambiar el índice de texto:", error);
+    }
+  };
+
 
  
-  cambiarTexto = () => {
-    this.setState(
-      (prevState) => ({
-        indiceTexto: (prevState.indiceTexto + 1) % textosVotacion.length,
-      }),
-      () => {
-        if (this.state.indiceTexto === textosVotacion.length - 1) {
-          this.props.navigation.navigate('Inicio');
-        }
-        AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
-      }
-    );
-  };
   
   theCont = async (boton) => {
     await this.setState(prevState => {
@@ -108,13 +95,12 @@ export default class Votacion extends Component {
   
   realizarVoto = (boton) => {
     if (!this.state.votoRealizado) {
-      this.setState({ votoRealizado: true, siguienteVisible: true });
+      this.setState({ votoRealizado: true});
       this.theCont(boton);
     }
   };
 
-
-
+ 
   render() {
 
     
@@ -132,7 +118,7 @@ export default class Votacion extends Component {
           <TouchableOpacity
             style={estilo.voto}
             onPress={() => this.realizarVoto('boton1')}
-            disabled={this.state.votoRealizado || !this.state.botonesHabilitados} // Deshabilita el botón si ya votó 
+            // Deshabilita el botón si ya votó 
             >
             <Text style={estilo.subtitulo}>A favor</Text>
 
@@ -142,7 +128,7 @@ export default class Votacion extends Component {
           <TouchableOpacity
             style={estilo.voto2}
             onPress={() => this.realizarVoto('boton2')}
-            disabled={this.state.votoRealizado || !this.state.botonesHabilitados}
+            
 >
             <Text style={estilo.subtitulo}>En contra</Text>
 
@@ -151,7 +137,7 @@ export default class Votacion extends Component {
           <TouchableOpacity
              style={estilo.voto3}
             onPress={() => this.realizarVoto('boton3')}
-            disabled={this.state.votoRealizado || !this.state.botonesHabilitados}
+            
 >
             <Text style={estilo.subtitulo}>Abstinencia</Text>
 
@@ -164,10 +150,15 @@ export default class Votacion extends Component {
           </View>
            
           </StyledView2>
-          <TouchableOpacity style={estilo.voto4} onPress={() => this.props.navigation.navigate('Results')}>
-            <Text style={estilo.subtitulo}>Resultados...</Text>
-          </TouchableOpacity> 
-
+          <TouchableOpacity
+  style={estilo.voto4}
+  onPress={() => {
+    this.props.navigation.navigate('Tope');
+    this.props.navigation.navigate('Results');
+  }}
+>
+  <Text style={estilo.subtitulo}></Text>
+</TouchableOpacity>
       
      
 

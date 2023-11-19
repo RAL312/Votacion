@@ -56,12 +56,12 @@ export default class Results extends Component {
       "CF06: Instalación de Hamacas en Áreas Comunes del Campus", 
       "CF07: Desarrollo de Programas de Intercambio Internacional", 
       "CF08: Instalación de Estaciones de Carga Solar para Dispositivos Móviles", 
-      "CF09: Implementación de un Programa de Mentores para Estudiantes de Primer Año",
-      "CF09: Implementación de un Programa de Mentores para Estudiantes de Primer Año"],
+      "CF01: Garantizar que todos los estudiantes tengan acceso a tecnología actualizada y conexiones a Internet de alta velocidad",
+      ],
     };
   }
 
-
+  
   async componentDidMount() {
     try {
       const contadoresString = await AsyncStorage.getItem('contadores');
@@ -77,37 +77,35 @@ export default class Results extends Component {
   }
 
 
- 
-  
   // Nueva función para cambiar el texto
-  cambiarTexto = () => {
-    this.setState(
-      (prevState) => ({
-        indiceTexto: (prevState.indiceTexto + 1) % 10, // Cambiado de 10 a 9 para que coincida con la longitud del array
-      }),
-      () => {
-        // Verifica si es el índice final y realiza la navegación
-        if (this.state.indiceTexto === 9) { // Cambiado de 9 a 8 para que coincida con el último índice
-          this.props.navigation.navigate('Inicio');
-        }
-        // Guarda el nuevo índice en AsyncStorage
-        AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
+  cambiarTexto = async () => {
+    try {
+      await this.setState(
+        (prevState) => ({
+          indiceTexto: (prevState.indiceTexto + 1) % 9, // Modificado para que coincida con la longitud del array
+        })
+      );
+  
+      // Verifica si es el índice final y realiza la navegación
+      if (this.state.indiceTexto === 8) { // Cambiado de 9 a 8 para que coincida con el último índice
+        this.props.navigation.navigate('Inicio');
       }
-    );
+  
+      // Guarda el nuevo índice en AsyncStorage
+      await AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
+    } catch (error) {
+      console.log("Error al cambiar el índice de texto:", error);
+    }
   };
   
-
-  resetVotes = async () => {
-    await AsyncStorage.removeItem('contadores'); // Borra los votos de AsyncStorage
-    await AsyncStorage.removeItem('indiceTexto');
-    this.setState({ contadores: { boton1: 0, boton2: 0, boton3: 0 } }); // Reinicia los votos en el estado local
+  resetContadores = async () => {
+    await AsyncStorage.removeItem('contadores');
+    this.setState({ contadores: { boton1: 0, boton2: 0, boton3: 0 } });
   };
-
-
+  
   render() {
     const { contadores } = this.state;
    
-
     return (
       <View>
         <StyledView>
@@ -119,14 +117,22 @@ export default class Results extends Component {
          <Text style={estilo.subtitulo2}>En contra: {contadores.boton2}</Text>
          <Text style={estilo.subtitulo3}>Abstinencia: {contadores.boton3}</Text>
 
-         <TouchableOpacity style={{marginTop: 200,}}onPress={this.resetVotes} >
-          <StyledText>Reiniciar Votos</StyledText>
-        </TouchableOpacity>
-        <TouchableOpacity style={estilo.voto4} onPress={() => this.props.navigation.navigate('Votacion')}>
-            <Text style={estilo.subtitulo}></Text>
-          </TouchableOpacity> 
+        
+         <TouchableOpacity style={{ marginTop: 10 }} onPress={this.resetContadores}>
+              <StyledText>Reiniciar Contadores</StyledText>
+            </TouchableOpacity>
 
 
+        <TouchableOpacity
+  style={estilo.voto4}
+  onPress={() => {
+    this.props.navigation.navigate('Tope');
+    this.props.navigation.navigate('Votacion');
+  }}
+>
+  <Text style={estilo.subtitulo}></Text>
+</TouchableOpacity>
+      
         <StyledSiguienteButton onPress={this.cambiarTexto}>
           <Text style={estilo.subtituloNext}>Siguiente</Text>
         </StyledSiguienteButton>
@@ -187,6 +193,12 @@ const estilo = StyleSheet.create ({
         backgroundColor: '#0E7AB6',
         marginVertical: 20, 
         borderRadius: 5,
+      },
+
+      subtituloNext: {
+        fontFamily: 'Lato-Bold',
+        color: 'white',
+        textAlign: 'center',
       },
     
       

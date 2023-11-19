@@ -26,7 +26,6 @@ import * as Animatable from 'react-native-animatable';
  textAlign: center;
 `;
 
-  
 
 
 export default class Inicio extends Component {
@@ -35,7 +34,10 @@ export default class Inicio extends Component {
     this.state = {
       
     };
+   
   }
+
+
 
 
   render() {
@@ -62,12 +64,12 @@ export default class Inicio extends Component {
               return; 
             }else{
               // Con la referencia del constructor copiada
-              _this.props.navigation.navigate('Results',  {name: xhttp.responseText, email: _this.state.email, password: _this.state.password} );
-              _this.props.navigation.navigate('Votacion');
+              _this.props.navigation.navigate('Tope',  {name: xhttp.responseText, email: _this.state.email, password: _this.state.password} );
+      
             }
-            _this.props.navigation.navigate('Results');
+           
           }
-          _this.props.navigation.navigate('Votacion');
+       
       };
       xhttp.open("GET", "https://vibronic-components.000webhostapp.com/verifica.php?correo=" + this.state.correo + "&contrasena=" + this.state.contrasena, true);
       xhttp.send();
