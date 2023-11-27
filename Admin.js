@@ -1,6 +1,23 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import styled from 'styled-components/native';
+
+const StyledView = styled.View`
+ width: 100%;
+ height: 100%;
+ backgroundColor: #173978;
+ justifyContent: center;
+ alifgnItems: center;
+ `;
+ 
+ const StyledView2 = styled.View`
+ width: 95%;
+ height: 95%;
+ backgroundColor: white;
+ borderRadius: 8px;
+ marginLeft: 10px;
+ alignItems: center;`;
 
 export default class Admin extends Component {
   constructor(props) {
@@ -11,8 +28,8 @@ export default class Admin extends Component {
 
   render() {
     return (
-      <View>
-        <View style={estilo.fondo}>
+      <StyledView>
+        <StyledView2>
           <View style={estilo.fondo2}>
             <View>
             <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal">Administrador</Animatable.Text>
@@ -40,29 +57,14 @@ export default class Admin extends Component {
        
             </View>
           </View>
-        </View>
-      </View>
+          </StyledView2>
+        </StyledView>
     );
   }
 }
 
 const estilo = StyleSheet.create({
-  fondo:{
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#0E7AC5"
-  },
-
-  fondo2:{
-    width: "95%",
-    height: 745,
-    borderColor: "#fca50d",
-    backgroundColor: "white",
-    borderRadius: 8,
-    marginLeft: 10,
-    marginTop: "5%",
-    alignItems: "center",
-  },
+  
   
   h1: {
     fontFamily: 'Oswald-VariableFont_wght',

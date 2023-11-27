@@ -6,6 +6,7 @@ import Admin from './Admin';
 import Votacion from './Votacion';
 import Results from './Results';
 import Tope from './Tope';
+import Gracias from './Gracias';
 
 
 export default class Navegacion extends Component {
@@ -27,7 +28,7 @@ np
         <Stack.Screen name="Votacion" component={Votacion} options={{headerShown:false}} />
         <Stack.Screen name="Results" component={Results} options={{headerShown:false}}/>
         <Stack.Screen name="Tope" component={Tope} options={{headerShown:false}}/>
-      
+        <Stack.Screen name="Gracias" component={Gracias} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
     );

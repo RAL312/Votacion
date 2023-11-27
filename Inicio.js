@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Alert } from 'react-native';
 import styled from 'styled-components/native';
 import * as Animatable from 'react-native-animatable';
-
+import { Button } from 'react-native';
  const StyledView = styled.View`
  width: 100%;
  height: 100%;
- backgroundColor: #0E7AC5;
+ backgroundColor: #173978;
  alignItems: center;
  justifyContent: center;`;
  
@@ -83,13 +83,13 @@ export default class Inicio extends Component {
           <View
         style={estilo.linea1}
         />
-        <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal" >VOTA - PLUS</Animatable.Text>
+        <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal" >VOTA - CUCEI</Animatable.Text>
         <View
         style={estilo.linea}
         />
         <Image
         style={estilo.img1}
-        source={require("./images/votenow.jpg")}
+        source={require("./images/cuceilogo.png")}
         />
         <Text style={estilo.subtitulo}>Ingresa aquí para empezar a votar</Text>
         <TextInput 
@@ -109,8 +109,12 @@ export default class Inicio extends Component {
        </TouchableOpacity>
 
       <Text style={estilo.subtitulo}>Si eres administrador...{'\n'} Ingresa con tu cuenta justo:</Text>
-      <TouchableOpacity onPress={() => this.props.navigation.navigate('Admin')} ><Text style={estilo.subtituloAqui}>Aquí</Text></TouchableOpacity>
-
+      <Button
+      title="Aquí"
+      onPress={() => this.props.navigation.navigate('Admin')}
+      style={estilo.subtituloAqui} 
+    >
+    </Button>
         </StyledView2>
         </StyledView>
         </View>
@@ -133,7 +137,7 @@ const estilo = StyleSheet.create({
 
  img1: {
   width: 250,
-  height: 200,
+  height: 250,
   borderRadius: 10,
   marginTop: 10,
  },
@@ -186,7 +190,7 @@ const estilo = StyleSheet.create({
   width: 100,
   height: 40,
   marginTop: 15,
-  borderRadius: 10,
+  borderRadius: 5,
   backgroundColor: "#0E7AC5"
  },
  

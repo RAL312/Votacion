@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Alert, Layout } from 'react-native';
 import styled from 'styled-components/native';
 import { Button } from 'react-native-elements';
+import { Provider as PaperProvider, Appbar } from 'react-native-paper';
 
 const StyledView = styled.View`
  width: 100%;
  height: 100%;
- backgroundColor: #0E7AC5;
+ backgroundColor: #173978;
  justifyContent: center;
  alifgnItems: center;
  `;
@@ -25,11 +26,15 @@ export default class Tope extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      checked: false,
+      selected: 'first',
     };
   }
 
   render() {
+
     return (
+      <PaperProvider>
       <StyledView>
         <StyledView2>
           <Text style={estilo.h1}>COMIENZA A VOTAR AHORA</Text>
@@ -39,8 +44,10 @@ export default class Tope extends Component {
               containerStyle={estilo.voto4}
               onPress={() => this.props.navigation.navigate('Votacion')}
             />
+
         </StyledView2>
       </StyledView>
+      </PaperProvider>
     );
   }
 }
@@ -83,3 +90,4 @@ const estilo = StyleSheet.create({
         textAlign: 'center',
       },
 });
+

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
+
 
 
 const StyledView = styled.View`
    flexGrow: 1;
    justifyContent: center;
    alignItems: center;
-   backgroundColor: #0E7AC5;`;
+   backgroundColor: #173978;`;
  
  const StyledView2 = styled.View`
     width: 95%;
@@ -26,15 +27,15 @@ export default class Votacion extends Component {
     super(props);
     this.state = {
       contadores: { boton1: 0, boton2: 0, boton3: 0 },
-      textos: ["CF01: Garantizar que todos los estudiantes tengan acceso a tecnología actualizada y conexiones a Internet de alta velocidad", 
-      "CF02: Invertir en la renovación y mejora de las instalaciones deportivas", 
-      "CF03: Implementación de un Sistema de Recompensas para la Asistencia a Conferencias", 
-      "CF04: Desarrollar programas de tutorías para apoyar a los estudiantes académicamente", 
-      "CF05: Aumentar el apoyo y la financiación para actividades culturales en el campus", 
-      "CF06: Instalación de Hamacas en Áreas Comunes del Campus", 
-      "CF07: Desarrollo de Programas de Intercambio Internacional", 
-      "CF08: Instalación de Estaciones de Carga Solar para Dispositivos Móviles", 
-       "CF01: Garantizar que todos los estudiantes tengan acceso a tecnología actualizada y conexiones a Internet de alta velocidad",
+      textos: ["CE01 - 03/23 ", 
+      "CE02 - 03/23", 
+      "CE03 - 04/23", 
+      "CE04 - 05/23", 
+      "CE05 - 06/23", 
+      "CE06 - 02/24", 
+      "CE07 - 01/25", 
+      "CE08 - 02/25", 
+      "CE01 - 03/23",
       ],
       indiceTexto: 0,
       votoRealizado: false,
@@ -76,6 +77,22 @@ export default class Votacion extends Component {
       console.log("Error al cambiar el índice de texto:", error);
     }
   };
+
+
+  saveVotos = async()=>{
+    try{
+      await addDoc(collection(db, 'votaciones'), {
+        ...state
+      })
+      Alert.alert('Alerta', 'Guardado exitosoo')
+
+    }
+    catch{
+      console.log(error)
+    }
+  }
+
+
 
 
  
@@ -195,14 +212,14 @@ const estilo = StyleSheet.create({
   voto4: {
     width: 30,
     height: 20,
-    backgroundColor: '#0E7AB6',
+    backgroundColor: '#2E7BB1',
     marginVertical: 20, 
     borderRadius: 5,
   },
 
   texto: {
-    fontFamily: 'OpenSans-VariableFont_wdth,wght',
-    fontSize: 17,
+    fontFamily: 'Lato-Bold',
+    fontSize: 35,
     color: 'black',
     textAlign: 'center',
     marginTop: -60,

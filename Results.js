@@ -5,10 +5,12 @@ import styled from 'styled-components/native';
 import * as Animatable from 'react-native-animatable';
 import { Button } from 'react-native-elements';
 
+
+
 const StyledView = styled.View`
  width: 100%;
  height: 100%;
- backgroundColor: #0E7AC5;
+ backgroundColor: #173978;
  justifyContent: center;
  alifgnItems: center;
  `;
@@ -48,15 +50,15 @@ export default class Results extends Component {
     this.state = {
       contadores: { boton1: 0, boton2: 0, boton3: 0 },
       indiceTexto: 0,
-      textos: ["CF01: Garantizar que todos los estudiantes tengan acceso a tecnología actualizada y conexiones a Internet de alta velocidad", 
-      "CF02: Invertir en la renovación y mejora de las instalaciones deportivas", 
-      "CF03: Implementación de un Sistema de Recompensas para la Asistencia a Conferencias", 
-      "CF04: Desarrollar programas de tutorías para apoyar a los estudiantes académicamente", 
-      "CF05: Aumentar el apoyo y la financiación para actividades culturales en el campus", 
-      "CF06: Instalación de Hamacas en Áreas Comunes del Campus", 
-      "CF07: Desarrollo de Programas de Intercambio Internacional", 
-      "CF08: Instalación de Estaciones de Carga Solar para Dispositivos Móviles", 
-      "CF01: Garantizar que todos los estudiantes tengan acceso a tecnología actualizada y conexiones a Internet de alta velocidad",
+      textos: ["CE01: ", 
+      "CE02 - 03/25", 
+      "CE03: ", 
+      "CE04: ", 
+      "CE05: ", 
+      "CE06: ", 
+      "CE07: ", 
+      "CE08: ", 
+      "CE01: ",
       ],
     };
   }
@@ -88,7 +90,7 @@ export default class Results extends Component {
   
       // Verifica si es el índice final y realiza la navegación
       if (this.state.indiceTexto === 8) { // Cambiado de 9 a 8 para que coincida con el último índice
-        this.props.navigation.navigate('Inicio');
+        this.props.navigation.navigate('Gracias');
       }
   
       // Guarda el nuevo índice en AsyncStorage
@@ -206,3 +208,4 @@ const estilo = StyleSheet.create ({
     
       
 });
+
