@@ -11,8 +11,8 @@ import { Button } from 'react-native';
  justifyContent: center;`;
  
  const StyledView2 = styled.View`
- width: 95%;
- height: 800px;
+ width: 94%;
+ height: 94%;
  borderColor: #fca50d;
  backgroundColor: white;
  borderRadius: 8px;
@@ -83,7 +83,7 @@ export default class Inicio extends Component {
           <View
         style={estilo.linea1}
         />
-        <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal" >VOTA - CUCEI</Animatable.Text>
+        <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal" >¡VOTA - CUCEI!</Animatable.Text>
         <View
         style={estilo.linea}
         />

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Alert, Layout } from 'react-native';
 import styled from 'styled-components/native';
 import { Button } from 'react-native-elements';
-import { Provider as PaperProvider, Appbar } from 'react-native-paper';
+
+// import { firebase } from '@react-native-firebase/firestore';
+import { db } from './Firebase/firebaseConfig';
 
 const StyledView = styled.View`
  width: 100%;
@@ -28,13 +30,26 @@ export default class Tope extends Component {
     this.state = {
       checked: false,
       selected: 'first',
+      
     };
   }
 
+
+  componentDidMount() {
+    // Intenta inicializar Firebase
+    // firebase.initializeApp(config); // Asegúrate de inicializar Firebase según tus necesidades
+  
+    // Verifica si db está definido
+    if (typeof db !== 'undefined') {
+      console.log('Lo hiciste: Firebase se inicializó correctamente');
+    } else {
+      console.error('Error: Firebase no se inicializó correctamente');
+    }
+  }
   render() {
 
     return (
-      <PaperProvider>
+ 
       <StyledView>
         <StyledView2>
           <Text style={estilo.h1}>COMIENZA A VOTAR AHORA</Text>
@@ -43,11 +58,11 @@ export default class Tope extends Component {
               type="solid"
               containerStyle={estilo.voto4}
               onPress={() => this.props.navigation.navigate('Votacion')}
+             
             />
-
         </StyledView2>
       </StyledView>
-      </PaperProvider>
+
     );
   }
 }

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
-
-
+import { doc, getDoc, updateDoc } from '@firebase/firestore';
+import { db } from './Firebase/firebaseConfig';
 
 const StyledView = styled.View`
    flexGrow: 1;
@@ -40,23 +40,25 @@ export default class Votacion extends Component {
       indiceTexto: 0,
       votoRealizado: false,
       botonesHabilitados: true,
+     
     };
+    this.handleVote = this.handleVote.bind(this);
+    
   }
 
- async componentDidMount() {
-  try {
-    // Obtener el índice de texto desde AsyncStorage
-    const indiceTextoString = await AsyncStorage.getItem('indiceTexto');
-
-    if (indiceTextoString !== null) {
-      const indiceTexto = parseInt(indiceTextoString);
-      this.setState({ indiceTexto });
+  async componentDidMount() {
+    try {
+      const contadoresString = await AsyncStorage.getItem('contadores');
+      const indiceTextoString = await AsyncStorage.getItem('indiceTexto'); // Agrega esta línea
+      if (contadoresString !== null) {
+        const contadores = JSON.parse(contadoresString);
+        const indiceTexto = indiceTextoString !== null ? parseInt(indiceTextoString) : 0; // Convierte a número
+        this.setState({ contadores, indiceTexto });
+      }
+    } catch (error) {
+      console.log("Hay un error al obtener contadores desde AsyncStorage:", error);
     }
-  } catch (error) {
-    console.log("Hay un error al obtener el índice de texto desde AsyncStorage:", error);
   }
-}
-
 
   cambiarTexto = async () => {
     try {
@@ -79,43 +81,34 @@ export default class Votacion extends Component {
   };
 
 
-  saveVotos = async()=>{
-    try{
-      await addDoc(collection(db, 'votaciones'), {
-        ...state
-      })
-      Alert.alert('Alerta', 'Guardado exitosoo')
-
-    }
-    catch{
-      console.log(error)
-    }
-  }
-
-
-
-
- 
   
-  theCont = async (boton) => {
-    await this.setState(prevState => {
-      const ContadorNuevo = { ...prevState.contadores };
-      ContadorNuevo[boton]++;
-      return { contadores: ContadorNuevo };
-    });
 
-    // Con esto guarda los contadores actualizados en AsyncStorage y así xd
-    AsyncStorage.setItem('contadores', JSON.stringify(this.state.contadores));
-  };
-
-  
   realizarVoto = (boton) => {
     if (!this.state.votoRealizado) {
       this.setState({ votoRealizado: true});
-      this.theCont(boton);
     }
   };
 
+
+  async handleVote(voteType) {
+    try {
+      const votacionesRef = doc(db, 'votaciones', 'qiVpZyqwH29pdWmxm6Zs');
+      const docSnap = await getDoc(votacionesRef);
+      const data = docSnap.data();
+
+      if (voteType === 'A_favor') {
+        data.A_favor += 1;
+      } else if (voteType === 'En_contra') {
+        data.En_contra += 1;
+      } else if (voteType === 'Abstinencia') {
+        data.Abstinencia += 1;
+      }
+
+      await updateDoc(votacionesRef, data);
+    } catch (error) {
+      console.error('Error al votar:', error);
+    }
+  }
  
   render() {
 
@@ -133,7 +126,8 @@ export default class Votacion extends Component {
 
           <TouchableOpacity
             style={estilo.voto}
-            onPress={() => this.realizarVoto('boton1')}
+            onPress={() => {this.realizarVoto('boton1')
+            this.handleVote('A_favor')}}
             disabled={this.state.votoRealizado || !this.state.botonesHabilitados} // Deshabilita el botón si ya votó // Deshabilita el botón si ya votó 
             >
             <Text style={estilo.subtitulo}>A favor</Text>
@@ -143,7 +137,8 @@ export default class Votacion extends Component {
        
           <TouchableOpacity
             style={estilo.voto2}
-            onPress={() => this.realizarVoto('boton2')}
+            onPress={() => {this.realizarVoto('boton2')
+            this.handleVote('En_contra')}}
             disabled={this.state.votoRealizado || !this.state.botonesHabilitados} // Deshabilita el botón si ya votó 
 >
             <Text style={estilo.subtitulo}>En contra</Text>
@@ -152,7 +147,8 @@ export default class Votacion extends Component {
 
           <TouchableOpacity
              style={estilo.voto3}
-            onPress={() => this.realizarVoto('boton3')}
+            onPress={() => {this.realizarVoto('boton3')
+            this.handleVote('Abstinencia')}}
             disabled={this.state.votoRealizado || !this.state.botonesHabilitados} // Deshabilita el botón si ya votó 
 >
             <Text style={estilo.subtitulo}>Abstinencia</Text>
@@ -169,7 +165,6 @@ export default class Votacion extends Component {
           <TouchableOpacity
   style={estilo.voto4}
   onPress={() => {
-    this.props.navigation.navigate('Tope');
     this.props.navigation.navigate('Results');
   }}
 >

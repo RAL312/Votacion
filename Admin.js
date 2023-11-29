@@ -12,8 +12,8 @@ const StyledView = styled.View`
  `;
  
  const StyledView2 = styled.View`
- width: 95%;
- height: 95%;
+ width: 94%;
+ height: 94%;
  backgroundColor: white;
  borderRadius: 8px;
  marginLeft: 10px;
@@ -30,7 +30,7 @@ export default class Admin extends Component {
     return (
       <StyledView>
         <StyledView2>
-          <View style={estilo.fondo2}>
+         
             <View>
             <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal">Administrador</Animatable.Text>
             <Image
@@ -56,7 +56,7 @@ export default class Admin extends Component {
 
        
             </View>
-          </View>
+         
           </StyledView2>
         </StyledView>
     );

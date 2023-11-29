@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
 import * as Animatable from 'react-native-animatable';
 import { Button } from 'react-native-elements';
-
-
+import { doc, onSnapshot, updateDoc  } from '@firebase/firestore';
+import { db } from './Firebase/firebaseConfig';
 
 const StyledView = styled.View`
  width: 100%;
@@ -16,7 +17,8 @@ const StyledView = styled.View`
  `;
  
  const StyledView2 = styled.View`
- width: 95%;
+ width: 94%;
+ height: 94%;
  height: 800px;
  borderColor: #fca50d;
  backgroundColor: white;
@@ -60,55 +62,68 @@ export default class Results extends Component {
       "CE08: ", 
       "CE01: ",
       ],
+      resultados: {
+        A_favor: 0,
+        En_contra: 0,
+        Abstinencia: 0,
+      },
     };
+    this.cambiarTexto = this.cambiarTexto.bind(this);
   }
 
   
-  async componentDidMount() {
-    try {
-      const contadoresString = await AsyncStorage.getItem('contadores');
-      const indiceTextoString = await AsyncStorage.getItem('indiceTexto'); // Agrega esta línea
-      if (contadoresString !== null) {
-        const contadores = JSON.parse(contadoresString);
-        const indiceTexto = indiceTextoString !== null ? parseInt(indiceTextoString) : 0; // Convierte a número
-        this.setState({ contadores, indiceTexto });
-      }
-    } catch (error) {
-      console.log("Hay un error al obtener contadores desde AsyncStorage:", error);
-    }
+  
+
+  componentDidMount() {
+    const votacionesRef = doc(db, 'votaciones', 'qiVpZyqwH29pdWmxm6Zs');
+    const unsubscribe = onSnapshot(votacionesRef, (docSnap) => {
+      const data = docSnap.data();
+      this.setState({
+        resultados: {
+          A_favor: data.A_favor || 0,
+          En_contra: data.En_contra || 0,
+          Abstinencia: data.Abstinencia || 0,
+        },
+      });
+    });
+
+    this.unsubscribe = unsubscribe;
   }
 
-
-  // Nueva función para cambiar el texto
-  cambiarTexto = async () => {
+  // Función para cambiar el texto
+  async cambiarTexto() {
     try {
-      await this.setState(
-        (prevState) => ({
-          indiceTexto: (prevState.indiceTexto + 1) % 9, // Modificado para que coincida con la longitud del array
-        })
-      );
-  
-      // Verifica si es el índice final y realiza la navegación
-      if (this.state.indiceTexto === 8) { // Cambiado de 9 a 8 para que coincida con el último índice
+      await this.setState((prevState) => ({
+        indiceTexto: (prevState.indiceTexto + 1) % 9,
+      }));
+
+      if (this.state.indiceTexto === 8) {
         this.props.navigation.navigate('Gracias');
       }
-  
-      // Guarda el nuevo índice en AsyncStorage
+
       await AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
     } catch (error) {
       console.log("Error al cambiar el índice de texto:", error);
     }
-  };
-  
+  }
 
-    resetContadores = async () => {
-    await AsyncStorage.removeItem('contadores');
-    this.setState({ contadores: { boton1: 0, boton2: 0, boton3: 0 } });
-  };
+  async reiniciarVotos() {
+    try {
+      const votacionesRef = doc(db, 'votaciones', 'qiVpZyqwH29pdWmxm6Zs');
+      await updateDoc(votacionesRef, {
+        A_favor: 0,
+        En_contra: 0,
+        Abstinencia: 0,
+      });
+    } catch (error) {
+      console.error('Error al reiniciar votos:', error);
+    }
+  }
+
+
   
   render() {
-    const { contadores } = this.state;
-   
+
     return (
       <View>
         <StyledView>
@@ -116,15 +131,14 @@ export default class Results extends Component {
           
          <Animatable.Text style={estilo.h1} animation="zoomInUp" duration={2500} iterationCount={1} direction="normal">-Resultados de los votos-</Animatable.Text>
         
-         <Text style={estilo.subtitulo}>A favor: {contadores.boton1}</Text>
-         <Text style={estilo.subtitulo2}>En contra: {contadores.boton2}</Text>
-         <Text style={estilo.subtitulo3}>Abstinencia: {contadores.boton3}</Text>
+         <Text style={estilo.subtitulo}>A favor: {this.state.resultados.A_favor}</Text>
+         <Text style={estilo.subtitulo2}>En contra: {this.state.resultados.En_contra}</Text>
+         <Text style={estilo.subtitulo3}>Abstinencia: {this.state.resultados.Abstinencia}</Text>
 
     
         <TouchableOpacity
           style={estilo.voto4}
           onPress={() => {
-            this.props.navigation.navigate('Tope');
             this.props.navigation.navigate('Votacion');}}>
 
   <Text style={estilo.subtitulo}></Text>
@@ -134,9 +148,12 @@ export default class Results extends Component {
               title="Reiniciar Contadores"
               tyope="solid"
               containerStyle={{ marginTop: 10 }}
-              onPress={this.resetContadores}
+              onPress={this.reiniciarVotos}
             />
 
+<StyledSiguienteButton onPress={() => this.reiniciarVotos()}>
+            <Text style={estilo.subtituloNext}>Reiniciar Votos</Text>
+          </StyledSiguienteButton>
 
         <StyledSiguienteButton onPress={this.cambiarTexto}>
           <Text style={estilo.subtituloNext}>Siguiente</Text>
