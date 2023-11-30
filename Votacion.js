@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
-import { doc, getDoc, updateDoc } from '@firebase/firestore';
+import { doc, getDoc, updateDoc, onSnapshot } from '@firebase/firestore';
 import { db } from './Firebase/firebaseConfig';
 
 const StyledView = styled.View`
@@ -35,7 +35,6 @@ export default class Votacion extends Component {
       "CE06 - 02/24", 
       "CE07 - 01/25", 
       "CE08 - 02/25", 
-      "CE01 - 03/23",
       ],
       indiceTexto: 0,
       votoRealizado: false,
@@ -46,39 +45,27 @@ export default class Votacion extends Component {
     
   }
 
-  async componentDidMount() {
-    try {
-      const contadoresString = await AsyncStorage.getItem('contadores');
-      const indiceTextoString = await AsyncStorage.getItem('indiceTexto'); // Agrega esta línea
-      if (contadoresString !== null) {
-        const contadores = JSON.parse(contadoresString);
-        const indiceTexto = indiceTextoString !== null ? parseInt(indiceTextoString) : 0; // Convierte a número
-        this.setState({ contadores, indiceTexto });
-      }
-    } catch (error) {
-      console.log("Hay un error al obtener contadores desde AsyncStorage:", error);
-    }
-  }
+ 
 
-  cambiarTexto = async () => {
-    try {
-      await this.setState(
-        (prevState) => ({
-          indiceTexto: (prevState.indiceTexto + 1) % 9, // Modificado para que coincida con la longitud del array
-        })
-      );
+  // cambiarTexto = async () => {
+  //   try {
+  //     await this.setState(
+  //       (prevState) => ({
+  //         indiceTexto: (prevState.indiceTexto + 1) % 9, // Modificado para que coincida con la longitud del array
+  //       })
+  //     );
   
-      // Verifica si es el índice final y realiza la navegación
-      if (this.state.indiceTexto === 8) { // Cambiado de 9 a 8 para que coincida con el último índice
-        this.props.navigation.navigate('Inicio');
-      }
+  //     // Verifica si es el índice final y realiza la navegación
+  //     if (this.state.indiceTexto === 8) { // Cambiado de 9 a 8 para que coincida con el último índice
+  //       this.props.navigation.navigate('Inicio');
+  //     }
   
-      // Guarda el nuevo índice en AsyncStorage
-      await AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
-    } catch (error) {
-      console.log("Error al cambiar el índice de texto:", error);
-    }
-  };
+  //     // Guarda el nuevo índice en AsyncStorage
+  //     await AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
+  //   } catch (error) {
+  //     console.log("Error al cambiar el índice de texto:", error);
+  //   }
+  // };
 
 
   
@@ -110,8 +97,23 @@ export default class Votacion extends Component {
     }
   }
  
-  render() {
+  
 
+  cambiarTexto = async () => {
+    try {
+      const { indiceTexto, textos } = this.state;
+      const nextIndex = (indiceTexto + 1) % textos.length;
+      const textoRef = doc(db, 'textos', (nextIndex + 1).toString());
+      await updateDoc(textoRef, { texto: true });
+
+      this.setState({ indiceTexto: nextIndex });
+    } catch (error) {
+      console.log("Error al cambiar el índice de texto en Votacion:", error);
+    }
+  };
+
+  render() {
+ const { textos, indiceTexto } = this.state;
     
     return (
       
@@ -121,7 +123,7 @@ export default class Votacion extends Component {
           {/* {this.props.route.params.name}  */}
           </Text>
           <View>
-            <Text style={estilo.texto}> {this.state.textos[this.state.indiceTexto]}</Text>
+            <Text style={estilo.texto}> {textos[indiceTexto]}</Text>
           </View>
 
           <TouchableOpacity
@@ -160,6 +162,14 @@ export default class Votacion extends Component {
               <Text style={estilo.mensaje}>Ya votaste, espera la siguiente propuesta</Text>
             )}
           </View>
+          <TouchableOpacity
+            onPress={() => {
+              // Lógica para manejar el cambio de texto en la pestaña 'Votacion'
+              // Puedes implementar algo similar a cambiarTexto en Results.js
+            }}
+          >
+            <Text>Siguiente</Text>
+          </TouchableOpacity>
            
           </StyledView2>
           <TouchableOpacity
