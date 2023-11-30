@@ -7,6 +7,7 @@ import * as Animatable from 'react-native-animatable';
 import { Button } from 'react-native-elements';
 import { doc, onSnapshot, updateDoc, getDoc  } from '@firebase/firestore';
 import { db } from './Firebase/firebaseConfig';
+import { useGlobalState } from './GlobalState';
 
 const StyledView = styled.View`
  width: 100%;
@@ -36,14 +37,6 @@ const StyledView = styled.View`
  textAlign: center;
  marginTop: 40px,;`;
 
- const StyledSiguienteButton = styled.TouchableOpacity`
- position: absolute;
- bottom: 20px;
- right: 20px;
- padding: 15px;
- backgroundColor: #17a398;
- borderRadius: 5px;
-`;
 
 
 export default class Results extends Component {
@@ -66,92 +59,29 @@ export default class Results extends Component {
         En_contra: 0,
         Abstinencia: 0,
       },
-      currentIndex: 1,
-      currentText: '',
+      showAnotherTouchable: false, // Nuevo estado
+     
     };
   
   }
-
   
-
-  
-  // componentDidMount() {
-  //   const votacionesRef = doc(db, 'votaciones', 'qiVpZyqwH29pdWmxm6Zs');
-  //   const unsubscribe = onSnapshot(votacionesRef, (docSnap) => {
-  //     const data = docSnap.data();
-  //     this.setState({
-  //       resultados: {
-  //         A_favor: data.A_favor || 0,
-  //         En_contra: data.En_contra || 0,
-  //         Abstinencia: data.Abstinencia || 0,
-  //       },
-  //     });
-  //   });
-
-  //   this.unsubscribe = unsubscribe;
-  // }
-
- 
-  
-  // Función para cambiar el texto
-  // async cambiarTexto() {
-  //   try {
-  //     await this.setState((prevState) => ({
-  //       indiceTexto: (prevState.indiceTexto + 1) % 9,
-  //     }));
-
-  //     if (this.state.indiceTexto === 8) {
-  //       this.props.navigation.navigate('Gracias');
-  //     }
-
-  //     await AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
-  //   } catch (error) {
-  //     console.log("Error al cambiar el índice de texto:", error);
-  //   }
-  // }
-
-  componentDidMount() {
-    // Obtener el texto inicial al cargar el componente
-    this.obtenerTexto(this.state.currentIndex);
-
-    // Configurar el listener para cambios en el texto actual
-    const textoDocRef = doc(db, 'textos', this.state.currentIndex.toString());
-    this.unsubscribe = onSnapshot(textoDocRef, (docSnap) => {
+   componentDidMount() {
+    const votacionesRef = doc(db, 'votaciones', 'qiVpZyqwH29pdWmxm6Zs');
+    const unsubscribe = onSnapshot(votacionesRef, (docSnap) => {
       const data = docSnap.data();
-      this.setState({ currentText: data.texto });
+      this.setState({
+        resultados: {
+          A_favor: data.A_favor || 0,
+          En_contra: data.En_contra || 0,
+          Abstinencia: data.Abstinencia || 0,
+        },
+        showAnotherTouchable: data.showAnotherTouchable || false,
+      });
     });
+
+    this.unsubscribe = unsubscribe;
   }
-
-  componentWillUnmount() {
-    // Limpiar el listener cuando el componente se desmonta
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
-  }
-
-  async obtenerTexto(index) {
-    try {
-      const textoDocRef = doc(db, 'textos', index.toString());
-      const docSnap = await getDoc(textoDocRef);
-
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        this.setState({ currentText: data.texto });
-      } else {
-        console.log("El documento no existe.");
-      }
-    } catch (error) {
-      console.error("Error al obtener el texto:", error);
-    }
-  }
-
-  cambiarTexto = () => {
-    // Cambiar al siguiente texto (circularmente del 1 al 8)
-    const nextIndex = (this.state.currentIndex % 8) + 1;
-    this.setState({ currentIndex: nextIndex }, () => {
-      this.obtenerTexto(this.state.currentIndex);
-    });
-  };
+  
 
   async reiniciarVotos() {
     try {
@@ -166,16 +96,15 @@ export default class Results extends Component {
     }
   }
 
-
+  
   
   render() {
-    // const { resultados, textos } = this.state;
-  
+   
     return (
       <View>
         <StyledView>
          <StyledView2>
-         <Text style={estilo.subtitulo}>{this.state.currentText}</Text>
+       
          <TouchableOpacity style={estilo.voto5} onPress={this.cambiarTexto}>
           <Text style={estilo.subtituloNext}>Siguiente</Text>
         </TouchableOpacity>
@@ -185,18 +114,22 @@ export default class Results extends Component {
          <Text style={estilo.subtitulo2}>En contra: {this.state.resultados.En_contra}</Text>
          <Text style={estilo.subtitulo3}>Abstinencia: {this.state.resultados.Abstinencia}</Text>
 
-    
-        <TouchableOpacity
-          style={estilo.voto4}
-          onPress={() => {
-            this.props.navigation.navigate('Votacion');}}>
+         <TouchableOpacity
+  style={estilo.voto4}
+  onPress={() => {
+    const newShowState = !this.state.showAnotherTouchable;
 
+    // Actualiza el estado en Votacion a través de Firebase
+    const globalStateRef = doc(db, 'globalState', 'x62kPrDwZbkbTfkKxnGd');
+    updateDoc(globalStateRef, { showAnotherTouchable: newShowState, showSiguienteButton: !newShowState });
+
+    // Asegúrate de que el estado local de Results se actualice
+    this.setState({ showAnotherTouchable: newShowState });
+  }}
+>
   <Text style={estilo.subtitulo}></Text>
 </TouchableOpacity>
-      
-<TouchableOpacity onPress={this.cambiarTexto}>
-          <Text>Siguiente</Text>
-        </TouchableOpacity>
+
           <Button
               title="Reiniciar Contadores"
               tyope="solid"
@@ -205,10 +138,7 @@ export default class Results extends Component {
             />
 
 
-        <StyledSiguienteButton onPress={this.cambiarTexto}>
-          <Text style={estilo.subtituloNext}>Siguiente</Text>
-        </StyledSiguienteButton>
-
+      
         </StyledView2>
         </StyledView>
       </View> 
@@ -284,3 +214,4 @@ const estilo = StyleSheet.create ({
     
       
 });
+

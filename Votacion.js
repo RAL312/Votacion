@@ -21,6 +21,15 @@ const StyledView = styled.View`
     alignItems: center;
     paddingVertical: 40px;`;
 
+    const StyledSiguienteButton = styled.TouchableOpacity`
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px;
+    backgroundColor: #17a398;
+    borderRadius: 5px;
+   `;
+   
 
 export default class Votacion extends Component {
   constructor(props) {
@@ -39,35 +48,90 @@ export default class Votacion extends Component {
       indiceTexto: 0,
       votoRealizado: false,
       botonesHabilitados: true,
-     
+      currentIndex: 1,
+      currentText: '',
+      showSiguienteButton: false, // Nuevo estado
     };
     this.handleVote = this.handleVote.bind(this);
     
   }
 
- 
 
-  // cambiarTexto = async () => {
-  //   try {
-  //     await this.setState(
-  //       (prevState) => ({
-  //         indiceTexto: (prevState.indiceTexto + 1) % 9, // Modificado para que coincida con la longitud del array
-  //       })
-  //     );
+componentDidMount() {
+  const { route } = this.props;
+  const { params } = route;
+  const showAnotherTouchable = params?.showAnotherTouchable || false;
+  const showSiguienteButton = params?.showSiguienteButton || false;
+
+  this.setState({
+    showAnotherTouchable,
+    showSiguienteButton,
+  });
+  const globalStateRef = doc(db, 'globalState', 'x62kPrDwZbkbTfkKxnGd');
+  this.unsubscribeGlobalState = onSnapshot(globalStateRef, (docSnap) => {
+    const data = docSnap.data();
+    this.setState({
+      showAnotherTouchable: data?.showAnotherTouchable || false,
+      showSiguienteButton: data?.showSiguienteButton || false,
+    });
+  });
+    // Obtener el texto inicial al cargar el componente
+    this.obtenerTexto(this.state.currentIndex);
   
-  //     // Verifica si es el índice final y realiza la navegación
-  //     if (this.state.indiceTexto === 8) { // Cambiado de 9 a 8 para que coincida con el último índice
-  //       this.props.navigation.navigate('Inicio');
-  //     }
+    // Configurar el listener para cambios en el texto actual
+    const textoDocRef = doc(db, 'textos', String(this.state.currentIndex)); // Convertir a cadena de manera segura
+    this.unsubscribeTexto = onSnapshot(textoDocRef, (docSnap) => {
+      const data = docSnap.data();
+      this.setState({ currentText: data.texto });
+    });
   
-  //     // Guarda el nuevo índice en AsyncStorage
-  //     await AsyncStorage.setItem('indiceTexto', this.state.indiceTexto.toString());
-  //   } catch (error) {
-  //     console.log("Error al cambiar el índice de texto:", error);
-  //   }
-  // };
+    // Configurar el listener para cambios en las votaciones
+    const votacionesRef = doc(db, 'votaciones', 'qiVpZyqwH29pdWmxm6Zs');
+    this.unsubscribeVotaciones = onSnapshot(votacionesRef, (docSnap) => {
+      const data = docSnap.data();
+      this.setState({
+        resultados: {
+          A_favor: data.A_favor || 0,
+          En_contra: data.En_contra || 0,
+          Abstinencia: data.Abstinencia || 0,
+        },
+      });
+    });
+  }
 
+  async obtenerTexto(index) {
+    try {
+      const textoDocRef = doc(db, 'textos', String(index));
+  
+      // Subscribe to real-time updates
+      this.unsubscribeTexto = onSnapshot(textoDocRef, (docSnap) => {
+        const data = docSnap.data();
+        this.setState({ currentText: data.texto });
+      });
+    } catch (error) {
+      console.error("Error al obtener el texto:", error);
+    }
+  }
 
+  cambiarTexto = () => {
+    const nextIndex = (this.state.currentIndex % 8) + 1;
+    console.log("Solicitando el texto para el índice:", nextIndex);
+  
+    this.setState({ currentIndex: nextIndex }, () => {
+      this.obtenerTexto(this.state.currentIndex);
+      
+    });
+  };
+
+  componentWillUnmount() {
+    // Cancela la suscripción a las actualizaciones en tiempo real
+    if (this.unsubscribeTexto) {
+      this.unsubscribeTexto();
+    }
+    if (this.unsubscribeGlobalState) {
+      this.unsubscribeGlobalState();
+    }
+  }
   
 
   realizarVoto = (boton) => {
@@ -99,21 +163,7 @@ export default class Votacion extends Component {
  
   
 
-  cambiarTexto = async () => {
-    try {
-      const { indiceTexto, textos } = this.state;
-      const nextIndex = (indiceTexto + 1) % textos.length;
-      const textoRef = doc(db, 'textos', (nextIndex + 1).toString());
-      await updateDoc(textoRef, { texto: true });
-
-      this.setState({ indiceTexto: nextIndex });
-    } catch (error) {
-      console.log("Error al cambiar el índice de texto en Votacion:", error);
-    }
-  };
-
   render() {
- const { textos, indiceTexto } = this.state;
     
     return (
       
@@ -123,7 +173,7 @@ export default class Votacion extends Component {
           {/* {this.props.route.params.name}  */}
           </Text>
           <View>
-            <Text style={estilo.texto}> {textos[indiceTexto]}</Text>
+            <Text style={estilo.texto}>{this.state.currentText}</Text>
           </View>
 
           <TouchableOpacity
@@ -162,15 +212,25 @@ export default class Votacion extends Component {
               <Text style={estilo.mensaje}>Ya votaste, espera la siguiente propuesta</Text>
             )}
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              // Lógica para manejar el cambio de texto en la pestaña 'Votacion'
-              // Puedes implementar algo similar a cambiarTexto en Results.js
-            }}
-          >
-            <Text>Siguiente</Text>
-          </TouchableOpacity>
-           
+          <StyledSiguienteButton
+              onPress={() => {
+                
+                this.setState((prevState) => ({
+                  showSiguienteButton: !prevState.showSiguienteButton,
+                   // Agrega esta línea
+                }), () => {
+                  this.cambiarTexto(); // Ejecuta cambiarTexto después de actualizar el estado
+                });
+              }}
+              style={{ display: this.state.showSiguienteButton ? 'flex' : 'none' }}
+            >
+              <Text style={estilo.subtituloNext}>Siguiente</Text>
+            </StyledSiguienteButton>
+     
+            <TouchableOpacity onPress={() => this.setState({ botonesHabilitados: true })}>
+  <Text>Picale </Text>
+</TouchableOpacity>
+
           </StyledView2>
           <TouchableOpacity
   style={estilo.voto4}
@@ -178,10 +238,33 @@ export default class Votacion extends Component {
     this.props.navigation.navigate('Results');
   }}
 >
+<TouchableOpacity
+  onPress={() => {
+    const newShowState = !this.state.showAnotherTouchable;
+    this.setState({ showAnotherTouchable: newShowState });
+
+    // Oculta el botón de votación al presionar el touchable en Votación
+    if (newShowState) {
+      this.setState({ showSiguienteButton: false });
+      // Actualiza el estado en Firebase
+      const globalStateRef = doc(db, 'globalState', 'x62kPrDwZbkbTfkKxnGd');
+      updateDoc(globalStateRef, { showAnotherTouchable: newShowState, showSiguienteButton: false });
+    } else {
+      // Muestra el botón de votación nuevamente
+      this.setState({ showSiguienteButton: !this.state.showSiguienteButton });
+      // Actualiza el estado en Firebase
+      const globalStateRef = doc(db, 'globalState', 'x62kPrDwZbkbTfkKxnGd');
+      updateDoc(globalStateRef, { showAnotherTouchable: newShowState, showSiguienteButton: !this.state.showSiguienteButton });
+    }
+  }}
+>
+  <Text style={estilo.subtitulo}>
+    {this.state.showAnotherTouchable ? 'Ocultar' : 'Mostrar'} Touchable en Votación
+  </Text>
+</TouchableOpacity>
   <Text style={estilo.subtitulo}></Text>
 </TouchableOpacity>
-      
-     
+
 
         </StyledView>
     );
